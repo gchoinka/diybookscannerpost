@@ -22,7 +22,7 @@ test -d "$workDir/info/logs" ||  mkdir "$workDir/info/logs"
 
 
 THIS_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-IJ=~/opt/Fiji.app/ImageJ-linux64
+IJ=~/opt/Fiji.app/ImageJ.sh
 
 
 if [[ "$2" != "skipuser" ]]; 
