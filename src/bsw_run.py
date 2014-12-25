@@ -168,22 +168,40 @@ mkdir_p(infoDir)
 
 
 roi = [(0,0), (0,0), (0,0), (0,0)]
-roiPointcurrent=0
-font = cv.InitFont(cv.CV_FONT_HERSHEY_SIMPLEX,3,3,1)
+roiPointcurrent = 0
 doRotate = False
 refresh=False
 length_mm=0
 
-def on_mouse (event, x, y, flags, param):
-    global roiPointcurrent
+def doRefresh():
+    global refresh
     global outputbuffer
     global image
-    global roi
-    global font
-    global refresh
-    global currentTime
-    global doRotate
     global length_mm
+    
+    font = cv.InitFont(cv.CV_FONT_HERSHEY_SIMPLEX,3,3,1)
+    outputbuffer = cv.CloneImage(image)
+
+    cv.Line(outputbuffer, roi[0], roi[1], cv.Scalar(255,255,255,255))
+    cv.Line(outputbuffer, roi[1], roi[2], cv.Scalar(255,255,255,255))
+    cv.Line(outputbuffer, roi[2], roi[3], cv.Scalar(255,255,255,255))
+    cv.Line(outputbuffer, roi[3], roi[0], cv.Scalar(255,255,255,255))
+
+    cv.PutText(outputbuffer, "0", roi[0], font, cv.Scalar(255,255,255,255))
+    cv.PutText(outputbuffer, "1", roi[1], font, cv.Scalar(255,255,255,255))
+    cv.PutText(outputbuffer, "2", roi[2], font, cv.Scalar(255,255,255,255))
+    cv.PutText(outputbuffer, "3", roi[3], font, cv.Scalar(255,255,255,255))
+    
+    cv.PutText(outputbuffer, "vSide %04dmm"%length_mm, (300,300), font, cv.Scalar(255,255,255,255))
+    cv.ShowImage('a_window', outputbuffer)
+    refresh = False
+
+def on_mouse (event, x, y, flags, param):
+    global roiPointcurrent
+    global image
+    global roi
+    global refresh
+    global doRotate
     
     if event == cv.CV_EVENT_LBUTTONDOWN:
         roi[roiPointcurrent] = (x,y)
@@ -201,21 +219,8 @@ def on_mouse (event, x, y, flags, param):
         refresh = True
     
     if refresh:
-        outputbuffer = cv.CloneImage(image)
+        doRefresh()
 
-        cv.Line(outputbuffer, roi[0], roi[1], cv.Scalar(255,255,255,255))
-        cv.Line(outputbuffer, roi[1], roi[2], cv.Scalar(255,255,255,255))
-        cv.Line(outputbuffer, roi[2], roi[3], cv.Scalar(255,255,255,255))
-        cv.Line(outputbuffer, roi[3], roi[0], cv.Scalar(255,255,255,255))
-
-        cv.PutText(outputbuffer, "0", roi[0], font, cv.Scalar(255,255,255,255))
-        cv.PutText(outputbuffer, "1", roi[1], font, cv.Scalar(255,255,255,255))
-        cv.PutText(outputbuffer, "2", roi[2], font, cv.Scalar(255,255,255,255))
-        cv.PutText(outputbuffer, "3", roi[3], font, cv.Scalar(255,255,255,255))
-        
-        cv.PutText(outputbuffer, "vSide %04dmm"%length_mm, (300,300), font, cv.Scalar(255,255,255,255))
-        cv.ShowImage('a_window', outputbuffer)
-        refresh = False
 
 cv.NamedWindow('a_window',0)       
 cv.SetMouseCallback('a_window', on_mouse, None)
@@ -238,8 +243,8 @@ for posfixe in camPosfixes:
     
     roi = [(0,0), (0,0), (0,0), (0,0)]
     roiPointcurrent=0
-    firstFile = thisLinkDir+"/"+files[0]
-    image=cv.LoadImage(firstFile, cv.CV_LOAD_IMAGE_COLOR)
+    aFile = thisLinkDir+"/"+files[len(files)/2]
+    image=cv.LoadImage(aFile, cv.CV_LOAD_IMAGE_COLOR)
 
     overlay = cv.CloneImage(image)
     outputbuffer = cv.CloneImage(image)    
@@ -267,6 +272,9 @@ for posfixe in camPosfixes:
             length_mm_tup += chr(key)
             length_mm = int("0"+length_mm_tup)
             refresh = True
+            
+        if refresh:
+            doRefresh()
             
     
     leftside_a=math.fabs(roi[0][0]-roi[3][0])
