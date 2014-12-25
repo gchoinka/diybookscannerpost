@@ -16,6 +16,12 @@ closeOnEnd=true;
 bachMode=true;
 showAtEnd=false;
 
+function noLogWindowPrint(s)
+{
+    if(!bachMode)
+        print(s);
+}
+
 projectionType="[Average Intensity]"
 
 workDir="/tmp/fiji";
@@ -77,7 +83,7 @@ for(k=0; k < lengthOf(pageTypes); ++k)
         {
             if(matches(bswFileLines[i], "SetSourceDPI.*"))
             {
-            srcDpi=parseFloat(replace(replace(bswFileLines[i], "SetSourceDPI[^=]*=[ ]*", ""), "#.*$", "")); 
+                srcDpi=parseFloat(replace(replace(bswFileLines[i], "SetSourceDPI[^=]*=[ ]*", ""), "#.*$", "")); 
             }
         }
 
@@ -94,8 +100,8 @@ for(k=0; k < lengthOf(pageTypes); ++k)
             {
                 if(matches(filelist[i], ".*"+pageTypes[k]+"\\.(tif|tiff|TIF|TIFF)$"))
                 {
-                filename = filelist[i];
-                filename = substring(filename, 0, lastIndexOf(filename,"."));
+                    filename = filelist[i];
+                    filename = substring(filename, 0, lastIndexOf(filename,"."));
                 }
             }
             print(filename);
@@ -182,7 +188,7 @@ for(k=0; k < lengthOf(pageTypes); ++k)
             saveto_filename = sliceName + ".tiff";
             saveAs("Tiff", saveto_dir + saveto_filename);
             close();   
-            print(saveto_dir + saveto_filename);
+            noLogWindowPrint(saveto_dir + saveto_filename);
         }
     }
 }

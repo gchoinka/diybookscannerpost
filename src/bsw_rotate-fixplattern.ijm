@@ -17,6 +17,11 @@ dialog_title = macro_title + " v" + d2s(macro_version, 2);
 bachMode=true;
 showAtEnd=false;
 
+function noLogWindowPrint(s)
+{
+    if(!bachMode)
+        print(s);
+}
 
 argvStr = getArgument();
 argv = split(argvStr, "\n");
@@ -38,7 +43,7 @@ else
 
 if(!File.exists(bswFileName))
 {
-    print("The File \""+bswFileName+"\" does not Exist, "+macro_title+" closes\n");
+    noLogWindowPrint("The File \""+bswFileName+"\" does not Exist, "+macro_title+" closes\n");
     eval("script", "System.exit(0);"); 
     exit();
 }
@@ -120,7 +125,7 @@ if(nSlices() == 1)
             filename = substring(filename, 0, lastIndexOf(filename,"."));
         }
     }
-    print(filename);
+    noLogWindowPrint(filename);
     rename(filename);
     srcImgTitle = filename;
 }
@@ -183,9 +188,9 @@ for(i = sliceFrom; i <= sliceTo; ++i)
     setSlice(i);
     sliceName="";
     if(nSlices() == 1)
-    sliceName = getTitle();
+        sliceName = getTitle();
     else
-    sliceName = getInfo("slice.label");
+        sliceName = getInfo("slice.label");
 
     run("Select None");
     workImage="workImage"+toString(i)+postfix;
@@ -224,7 +229,7 @@ for(i = sliceFrom; i <= sliceTo; ++i)
 
     selectImage(workImage);
     close();
-    print(saveto_dir + saveto_filename);
+    noLogWindowPrint(saveto_dir + saveto_filename);
 }
 
 selectImage(srcImgID);
