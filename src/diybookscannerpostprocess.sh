@@ -21,10 +21,8 @@ test -d "$workDir/info/" ||  mkdir "$workDir/info/"
 test -d "$workDir/info/logs" ||  mkdir "$workDir/info/logs"
 test -d "$workDir/result" || mkdir "$workDir/result"
 
-
 export THIS_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export IJ=~/opt/Fiji.app/ImageJ-linux64
-
 
 if [[ "$2" != "skipuser" ]]; 
 then 
