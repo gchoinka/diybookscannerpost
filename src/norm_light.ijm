@@ -15,6 +15,10 @@ closeOnEnd=true;
 bachMode=true;
 showAtEnd=false;
 
+//closeOnEnd=false;
+//bachMode=false;
+//showAtEnd=true;
+
 function noLogWindowPrint(s)
 {
     if(!bachMode)
@@ -57,7 +61,7 @@ if(bachMode)
 for(k=0; k < lengthOf(pageTypes); ++k)
 {
     if(File.exists(workDir+"/links/"+pageTypes[k]+"/book.bsw"))
-    {      
+    {   
         run("Image Sequence...", "open=["+workDir+"/result/] increment=1 scale=100 file=["+pageTypes[k]+"] or=[] sort use");
         pagesStack="pagesStack"+toString(k)+postfix;
         rename(pagesStack);
@@ -74,7 +78,6 @@ for(k=0; k < lengthOf(pageTypes); ++k)
                 filename = substring(filename, 0, lastIndexOf(filename,"."));
                 }
             }
-            print(filename);
             rename(filename);
             pagesStack = filename;
         }
@@ -174,5 +177,5 @@ function getModalValue()
     }
     return modal_value;  
 }
-
-eval("script", "System.exit(0);");
+if(closeOnEnd)
+	eval("script", "System.exit(0);");

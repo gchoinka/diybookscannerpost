@@ -15,14 +15,15 @@ echo $0" [path] <skipuser|skipprocess>"
 
 export workDir="$1"
 
-imagej_opt="--no-splash"
+export imagej_opt="--no-splash --java-home /usr/lib/jvm/java-7-oracle/jre"
 
 test -d "$workDir/info/" ||  mkdir "$workDir/info/"
 test -d "$workDir/info/logs" ||  mkdir "$workDir/info/logs"
+test -d "$workDir/result" || mkdir "$workDir/result"
 
 
-THIS_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-IJ=~/opt/Fiji.app/ImageJ-linux64
+export THIS_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+export IJ=~/opt/Fiji.app/ImageJ-linux64
 
 
 if [[ "$2" != "skipuser" ]]; 
@@ -35,7 +36,7 @@ then
 
     for f in lef rig a4h
     do 
-      $IJ $imagej_opt -- -batch "$THIS_DIR/bsw_rotate-fixplattern.ijm" "$workDir/links/$f/book.bsw" 
+      test -f "$workDir/links/$f/book.bsw" && $IJ $imagej_opt -- -batch "$THIS_DIR/bsw_rotate-fixplattern.ijm" "$workDir/links/$f/book.bsw" 
     done
 
 
@@ -63,14 +64,14 @@ then
 
 
 
-    rm "$workDir/tmp" "$workDir/result/norm" "$workDir/result/gr300" "$workDir/result/sw300" "$workDir/result/gr170" "$workDir/result/sw170" "$workDir/result/white" -rf
+    #rm "$workDir/tmp" "$workDir/result/norm" "$workDir/result/gr300" "$workDir/result/sw300" "$workDir/result/gr170" "$workDir/result/sw170" "$workDir/result/white" -rf
 
-    mv "$workDir/result" "$workDir/raw_croped"
+    #mv "$workDir/result" "$workDir/raw_croped"
 
-    cd "$workDir/raw_croped"
-    find . -maxdepth 1 -iname "image*.tif"  -exec sam2p -j:quiet "{}" "{}.jpg" \; -exec rm "{}" \;
-    find . -maxdepth 1 -iname "image*.tiff" -exec sam2p -j:quiet "{}" "{}.jpg" \; -exec rm "{}" \;
-    cd "$thisDir"
+    #cd "$workDir/raw_croped"
+    #find . -maxdepth 1 -iname "image*.tif"  -exec sam2p -j:quiet "{}" "{}.jpg" \; -exec rm "{}" \;
+    #find . -maxdepth 1 -iname "image*.tiff" -exec sam2p -j:quiet "{}" "{}.jpg" \; -exec rm "{}" \;
+    #cd "$thisDir"
 
-    mv "$workDir/links" "$workDir/info/"
+    #mv "$workDir/links" "$workDir/info/"
 fi

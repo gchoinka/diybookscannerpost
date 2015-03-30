@@ -16,6 +16,10 @@ closeOnEnd=true;
 bachMode=true;
 showAtEnd=false;
 
+//closeOnEnd=false;
+//bachMode=false;
+//showAtEnd=true;
+
 function noLogWindowPrint(s)
 {
     if(!bachMode)

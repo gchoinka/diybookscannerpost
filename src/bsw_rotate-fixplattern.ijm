@@ -14,8 +14,13 @@ postfix=macro_title+toString(random()*10000)
 
 dialog_title = macro_title + " v" + d2s(macro_version, 2);
 
+closeOnEnd=true;
 bachMode=true;
 showAtEnd=false;
+
+//closeOnEnd=false;
+//bachMode=false;
+//showAtEnd=true;
 
 function noLogWindowPrint(s)
 {
@@ -106,7 +111,7 @@ sourcedpi = srcDpi;
 
 setBatchMode(bachMode);
 
-run("Close All");
+//run("Close All");
 run("Image Sequence...", "open=["+srcDir+"] number=[] starting=1 increment=1 scale=100 file=[] or=[] sort use");
 
 
@@ -174,6 +179,15 @@ if(degree == 180)
     run("Rotate 90 Degrees Right");
     roi_rotate90_left(x,y,xrot, yrot, xsize, ysize);
 }
+
+if(degree == 90)
+{
+    xrot=x;
+    yrot=y;
+} 
+
+
+
 makeSelection("point", xrot, yrot);
 make_rect(0);
 
@@ -295,4 +309,5 @@ function roi_rotate90_right(x0,y0,x1,y1,xsize,ysize)
     }
 }
 
-eval("script", "System.exit(0);"); 
+if(closeOnEnd)
+    eval("script", "System.exit(0);");
